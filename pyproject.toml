@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "just-another-rss-reader"
+version = "0.1.0"
+description = "Just another hosted Rss Reader"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.8.2"
+sumy = "^0.10.0"
+feedparser = "^6.0.8"
+httpx = "^0.22.0"
+yake = "^0.4.8"
+
+[tool.poetry.dev-dependencies]
+ipython = "black"
+black = {version = "^22.3.0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
