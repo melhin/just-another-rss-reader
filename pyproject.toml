@@ -11,6 +11,7 @@ sumy = "^0.10.0"
 feedparser = "^6.0.8"
 httpx = "^0.22.0"
 yake = "^0.4.8"
+aiosqlite = "^0.17.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "black"

@@ -1,3 +1,4 @@
+from hashlib import md5
 from typing import List
 
 from pydantic import BaseModel
@@ -8,6 +9,10 @@ class Entry(BaseModel):
     description: str
     entities: List[str]
     link: str
+
+    @property
+    def hash(self):
+        return md5(self.link.encode("utf-8")).hexdigest()
 
 
 class Feed(BaseModel):
@@ -22,3 +27,4 @@ class CompleteData(BaseModel):
 class FeedParserResponse(BaseModel):
     link: str
     title: str
+    feed_url: str
