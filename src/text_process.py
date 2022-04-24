@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 import nltk
-import yake
+import spacy
 from sumy.nlp.stemmers import Stemmer
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.parsers.html import HtmlParser
@@ -16,8 +16,7 @@ LANGUAGE = "english"
 SENTENCES_COUNT = 10
 
 logger = logging.getLogger(__name__)
-nltk.download("punkt")
-KW_EXTRACTOR = yake.KeywordExtractor()
+nlp = spacy.load("en_core_web_sm")
 
 
 def generate_article_summary(body: str, url: str) -> str:
@@ -34,9 +33,12 @@ def generate_article_summary(body: str, url: str) -> str:
 
 def get_entities_for_text(entry: Entry) -> List[str]:
     logging.info("Got for analysis in worker %s", entry.title)
-    entities = []
-    for entity in KW_EXTRACTOR.extract_keywords(f"{entry.title} {entry.description}"):
-        entities.append(entity[0])
+    allowed_lables = ["GPE", "NORP", "PERSON", "LOC", "ORG"]
+    doc = nlp(entry.description)
+    entities = set()
+    for ent in doc.ents:
+        if ent.label_ in allowed_lables:
+            entities.add(ent.text)
     logging.info("Finished analysis in worker %s", entry.title)
     return entities
 

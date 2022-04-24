@@ -1,5 +1,6 @@
 import logging
 import sqlite3
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -9,13 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 def get_db_path() -> Path:
-    here = Path.cwd()
-    while not (here / ".git").exists():
-        if here == here.parent:
-            raise RuntimeError("Cannot find root github dir")
-        here = here.parent
-
-    return here / "db.sqlite3"
+    default_storage = Path.cwd() / "storage"
+    storage_path = os.getenv("STORAGE_PATH", default_storage)
+    return os.path.join(storage_path, "db.sqlite3")
 
 
 @asynccontextmanager
@@ -50,6 +47,7 @@ def try_make_db() -> None:
             """CREATE TABLE IF NOT EXISTS article_keywords (
                 keyword TEXT,
                 article_id INTEGER NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 CONSTRAINT fk_articles
                     FOREIGN KEY (article_id)
                     REFERENCES article(id)

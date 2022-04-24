@@ -10,8 +10,8 @@ pydantic = "^1.8.2"
 sumy = "^0.10.0"
 feedparser = "^6.0.8"
 httpx = "^0.22.0"
-yake = "^0.4.8"
 aiosqlite = "^0.17.0"
+spacy = "^3.2.4"
 
 [tool.poetry.dev-dependencies]
 ipython = "black"
