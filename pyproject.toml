@@ -12,6 +12,9 @@ feedparser = "^6.0.8"
 httpx = "^0.22.0"
 aiosqlite = "^0.17.0"
 spacy = "^3.2.4"
+pytailwindcss = "0.1.4"
+starlette = "^0.20.4"
+uvicorn = "^0.18.2"
 
 [tool.poetry.dev-dependencies]
 ipython = "black"
@@ -20,3 +23,7 @@ black = {version = "^22.3.0", allow-prereleases = true}
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+start = "app:run"

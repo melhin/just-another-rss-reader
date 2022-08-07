@@ -1,5 +1,7 @@
 FROM python:3.10-slim-buster
 
+LABEL org.opencontainers.image.source=https://github.com/melhin/just-another-rss-reader
+
 ARG APP_NAME=just-another-rss-reader
 ARG APP_PATH=/opt/$APP_NAME
 ARG PYTHON_VERSION=3.10.0

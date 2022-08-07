@@ -1,5 +1,5 @@
 from src.db import try_make_db
-from src.fetch import fetch_feed
+from src.fetcher.fetch import fetch_feed
 
 
 async def start_collection(feed_file: str):

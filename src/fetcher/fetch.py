@@ -6,9 +6,9 @@ import feedparser
 
 from src.db import connection
 from src.db.articles import Article
-from src.feed_models import CompleteData, Feed, FeedParserResponse
-from src.request import fetch_from_url
-from src.text_process import get_entry
+from src.fetcher.feed_models import CompleteData, Feed, FeedParserResponse
+from src.fetcher.request import fetch_from_url
+from src.fetcher.text_process import get_entry
 
 logger = logging.getLogger(__name__)
 SIMULTANEOUS_DOWNLOADS = 5

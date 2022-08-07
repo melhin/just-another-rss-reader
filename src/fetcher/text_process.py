@@ -9,8 +9,8 @@ from sumy.parsers.html import HtmlParser
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.utils import get_stop_words
 
-from src.feed_models import Entry, FeedParserResponse
-from src.request import fetch_from_url
+from src.fetcher.feed_models import Entry, FeedParserResponse
+from src.fetcher.request import fetch_from_url
 
 LANGUAGE = "english"
 SENTENCES_COUNT = 10
@@ -38,7 +38,7 @@ def get_entities_for_text(entry: Entry) -> List[str]:
     entities = set()
     for ent in doc.ents:
         if ent.label_ in allowed_lables:
-            entities.add(ent.text)
+            entities.add(str(ent.text).lower())
     logging.info("Finished analysis in worker %s", entry.title)
     return entities
 

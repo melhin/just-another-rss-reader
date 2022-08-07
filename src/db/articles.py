@@ -2,7 +2,7 @@ from collections import defaultdict
 from typing import Dict, List
 
 from aiosqlite import Connection
-from src.feed_models import Entry
+from src.fetcher.feed_models import Entry
 
 
 class Article:
