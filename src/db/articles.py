@@ -54,3 +54,20 @@ class Article:
             await connection.commit()
 
         await cursor.close()
+
+    async def get_articles(
+        self, connection: Connection, offset: int = 0, limit: int = 10
+    ) -> Dict[str, str]:
+        cursor = await connection.cursor()
+        sql = f"select title, url, description  from articles  order by created_at desc limit ? offset ?"
+        await cursor.execute(
+            sql,
+            (
+                limit,
+                offset,
+            ),
+        )
+        columns = ["title", "url", "description"]
+        formated_response = [dict(zip(columns, row)) for row in await cursor.fetchall()]
+        await cursor.close()
+        return formated_response

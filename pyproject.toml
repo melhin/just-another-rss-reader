@@ -15,6 +15,7 @@ spacy = "^3.2.4"
 pytailwindcss = "0.1.4"
 starlette = "^0.20.4"
 uvicorn = "^0.18.2"
+databases = {extras = ["asyncpg"], version = "^0.6.1"}
 
 [tool.poetry.dev-dependencies]
 ipython = "black"
