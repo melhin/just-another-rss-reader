@@ -34,32 +34,58 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-purple-800 hover:text-purple-600" href="/this-year">
-                            <span class="fa fa-home mr-6"></span> This Year
+                            <span class="fa fa-home mr-6"></span> This Year</a>
                     </li>
                 </ul>
             </div>
         </aside>
         <main role="main" class="w-full sm:w-2/3 md:w-3/4 pt-1 px-2">
+            <div>
                     <table class="table-fixed">
                         {% for row in response %}
                         <tr>
                             <td>
                             <div class="block p-6 rounded-lg shadow-lg bg-white md:max-w-5xl sm:max-w-sm">
+                                <div>
                             <a class="nav-link text-purple-800 hover:text-purple-600" href="{{ row.url }}">
-                              <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">{{ row.title }}</h5>
+                              <h5 class="text-gray-900 text-l leading-tight font-medium mb-2">{{ row.title }}</h5></a>
                               <p class="text-gray-700 text-sm whitespace-normal">
                                 {{ row.description }}
                               </p>
+                                </div>
+                                <div class="flex justify-end text-xs">
+                            <span>
+                                Source: <a class="nav-link text-purple-800 hover:text-purple-600" href="{{ row.feed_url }}">{{ row.feed_url }}</a>
+                            </span>
+                                </div>
                             </div>                
                             </td>
                         </tr>
                         {% endfor %}
                     </table>
+            </div>
+            <div>
+                <nav aria-label="Page navigation example">
+                    <ul class="inline-flex mt-4 -space-x-px">
+                        <li>
+                        {% if previous %}
+                        <a href="?offset={{ previous }}"
+                        class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 ml-0 rounded-l-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                        </li>
+                        {% endif %}
+                        {% if next %}
+                        <li>
+                        <a href="?offset={{ next }}"
+                        class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+            </nav>
+            </div>
         </main>
     </div>
 </div>
-<!--
-<footer class="absolute bottom-0 left-0 right-0  bg-blue-100 sm:p-6 dark:bg-gray-900">
+<footer class="h-10 bg-blue-100 sm:p-6 dark:bg-gray-900">
     <div class="sm:flex sm:items-center sm:justify-between">
         <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">All the information present above is only for personal use. The sources are mentioned accordingly and I do not claim any knowledge in what links are shown here
         </span>
@@ -75,6 +101,5 @@
         </div>
     </div>
 </footer>
--->
 </body>
 </html>

@@ -1,8 +1,8 @@
+http://feeds.washingtonpost.com/rss/world
+https://www.reddit.com/r/worldnews/.rss
 http://feeds.bbci.co.uk/news/world/rss.xml
 https://www.cnbc.com/id/100727362/device/rss/rss.html
 https://timesofindia.indiatimes.com/rssfeeds/296589292.cms
 https://www.theguardian.com/world/rss
 http://feeds.feedburner.com/ndtvnews-world-news
 https://rss.nytimes.com/services/xml/rss/nyt/World.xml
-http://feeds.washingtonpost.com/rss/world
-https://www.reddit.com/r/worldnews/.rss

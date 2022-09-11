@@ -2,7 +2,7 @@
 name = "just-another-rss-reader"
 version = "0.1.0"
 description = "Just another hosted Rss Reader"
-authors = ["Your Name <you@example.com>"]
+authors = [""]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -15,11 +15,34 @@ spacy = "^3.2.4"
 pytailwindcss = "0.1.4"
 starlette = "^0.20.4"
 uvicorn = "^0.18.2"
-databases = {extras = ["asyncpg"], version = "^0.6.1"}
+SQLAlchemy = "1.4"
 
 [tool.poetry.dev-dependencies]
 ipython = "black"
 black = {version = "^22.3.0", allow-prereleases = true}
+flake8 = "^5.0.4"
+darker = {extras = ["isort"], version = "^1.5.0"}
+
+[tool.isort]
+line_length = 120
+atomic = true
+profile = "black"
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY"]
+default_section = "THIRDPARTY"
+length_sort = true
+skip = "venv/"
+
+[tool.black]
+target-version = ['py310']
+include = '\.pyi?$'
+line-length = 120
+extend-exclude = '''
+/(
+    \.git
+  | media
+  | static
+)/
+'''
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

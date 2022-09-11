@@ -49,19 +49,6 @@ six = "*"
 test = ["astroid", "pytest"]
 
 [[package]]
-name = "asyncpg"
-version = "0.26.0"
-description = "An asyncio PostgreSQL driver"
-category = "main"
-optional = false
-python-versions = ">=3.6.0"
-
-[package.extras]
-test = ["uvloop (>=0.15.3)", "flake8 (>=3.9.2,<3.10.0)", "pycodestyle (>=2.7.0,<2.8.0)"]
-docs = ["sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinxcontrib-asyncio (>=0.3.0,<0.4.0)", "Sphinx (>=4.1.2,<4.2.0)"]
-dev = ["uvloop (>=0.15.3)", "flake8 (>=3.9.2,<3.10.0)", "pycodestyle (>=2.7.0,<2.8.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinxcontrib-asyncio (>=0.3.0,<0.4.0)", "Sphinx (>=4.1.2,<4.2.0)", "pytest (>=6.0)", "Cython (>=0.29.24,<0.30.0)"]
-
-[[package]]
 name = "backcall"
 version = "0.2.0"
 description = "Specifications for callback functions passed in to an API"
@@ -177,26 +164,23 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "databases"
-version = "0.6.1"
-description = "Async database support for Python."
-category = "main"
+name = "darker"
+version = "1.5.0"
+description = "Apply Black formatting only in regions changed since last commit"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-asyncpg = {version = "*", optional = true, markers = "extra == \"asyncpg\""}
-sqlalchemy = ">=1.4,<1.5"
+black = ">=21.5b1"
+isort = {version = ">=5.0.1", optional = true, markers = "extra == \"isort\""}
+toml = ">=0.10.0"
 
 [package.extras]
-sqlite = ["aiosqlite"]
-postgresql = ["asyncpg"]
-mysql = ["aiomysql"]
-asyncpg = ["asyncpg"]
-asyncmy = ["asyncmy"]
-aiosqlite = ["aiosqlite"]
-aiopg = ["aiopg"]
-aiomysql = ["aiomysql"]
+test = ["wheel (>=0.21.0)", "types-toml (>=0.10.4)", "types-requests (>=2.27.9)", "twine (>=2.0.0)", "safety (>=1.10.3)", "ruamel.yaml (>=0.17.21)", "requests-cache (>=0.7)", "regex (>=2021.4.4)", "pyupgrade (>=2.31.0)", "pytest-mypy", "pytest-kwparametrize (>=0.0.3)", "pytest-isort (>=1.1.0)", "pytest-flake8 (>=1.0.6)", "pytest-darker", "pytest (>=6.2.0)", "pylint", "pygments", "mypy (>=0.940)", "flake8-comprehensions (>=3.7.0)", "flake8-bugbear (>=22.1.11)", "flake8-2020 (>=1.6.1)", "flake8 (<4)", "defusedxml (>=0.7.1)", "codespell (>=2.1.0)", "black (>=21.7b1)", "bandit (>=1.7.1)", "airium (>=0.2.3)"]
+release = ["requests-cache (>=0.7)", "defusedxml (>=0.7.1)", "click (>=8.0.0)", "airium (>=0.2.3)"]
+isort = ["isort (>=5.0.1)"]
+color = ["Pygments (>=2.4.0)"]
 
 [[package]]
 name = "decorator"
@@ -232,6 +216,19 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 sgmllib3k = "*"
+
+[[package]]
+name = "flake8"
+version = "5.0.4"
+description = "the modular source code checker: pep8 pyflakes and co"
+category = "dev"
+optional = false
+python-versions = ">=3.6.1"
+
+[package.dependencies]
+mccabe = ">=0.7.0,<0.8.0"
+pycodestyle = ">=2.9.0,<2.10.0"
+pyflakes = ">=2.5.0,<2.6.0"
 
 [[package]]
 name = "greenlet"
@@ -335,6 +332,20 @@ test = ["pytest (<7.1)", "pytest-asyncio", "testpath"]
 test_extra = ["pytest (<7.1)", "pytest-asyncio", "testpath", "curio", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.19)", "pandas", "trio"]
 
 [[package]]
+name = "isort"
+version = "5.10.1"
+description = "A Python utility / library to sort Python imports."
+category = "dev"
+optional = false
+python-versions = ">=3.6.1,<4.0"
+
+[package.extras]
+pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
+requirements_deprecated_finder = ["pipreqs", "pip-api"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+plugins = ["setuptools"]
+
+[[package]]
 name = "jedi"
 version = "0.18.1"
 description = "An autocompletion tool for Python that can be used for text editors."
@@ -414,6 +425,14 @@ python-versions = ">=3.5"
 
 [package.dependencies]
 traitlets = "*"
+
+[[package]]
+name = "mccabe"
+version = "0.7.0"
+description = "McCabe checker, plugin for flake8"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
 
 [[package]]
 name = "murmurhash"
@@ -584,6 +603,14 @@ python-versions = "*"
 tests = ["pytest"]
 
 [[package]]
+name = "pycodestyle"
+version = "2.9.1"
+description = "Python style guide checker"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "pycountry"
 version = "22.3.5"
 description = "ISO country, subdivision, language, currency and script definitions and their translations"
@@ -605,6 +632,14 @@ typing-extensions = ">=3.7.4.3"
 [package.extras]
 dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
+
+[[package]]
+name = "pyflakes"
+version = "2.5.0"
+description = "passive checker of Python programs"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
 
 [[package]]
 name = "pygments"
@@ -788,35 +823,32 @@ wasabi = ">=0.8.1,<1.1.0"
 
 [[package]]
 name = "sqlalchemy"
-version = "1.4.40"
+version = "1.4.0"
 description = "Database Abstraction Library"
 category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 
 [package.dependencies]
-greenlet = {version = "!=0.4.17", markers = "python_version >= \"3\" and (platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\")"}
+greenlet = {version = "!=0.4.17", markers = "python_version >= \"3\""}
 
 [package.extras]
 aiomysql = ["greenlet (!=0.4.17)", "aiomysql"]
-aiosqlite = ["typing_extensions (!=3.10.0.1)", "greenlet (!=0.4.17)", "aiosqlite"]
 asyncio = ["greenlet (!=0.4.17)"]
-asyncmy = ["greenlet (!=0.4.17)", "asyncmy (>=0.2.3,!=0.2.4)"]
-mariadb_connector = ["mariadb (>=1.0.1,!=1.1.2)"]
+mariadb_connector = ["mariadb (>=1.0.1)"]
 mssql = ["pyodbc"]
 mssql_pymssql = ["pymssql"]
 mssql_pyodbc = ["pyodbc"]
-mypy = ["sqlalchemy2-stubs", "mypy (>=0.910)"]
+mypy = ["sqlalchemy2-stubs", "mypy (>=0.800)"]
 mysql = ["mysqlclient (>=1.4.0,<2)", "mysqlclient (>=1.4.0)"]
-mysql_connector = ["mysql-connector-python"]
+mysql_connector = ["mysqlconnector"]
 oracle = ["cx_oracle (>=7,<8)", "cx_oracle (>=7)"]
 postgresql = ["psycopg2 (>=2.7)"]
 postgresql_asyncpg = ["greenlet (!=0.4.17)", "asyncpg"]
-postgresql_pg8000 = ["pg8000 (>=1.16.6,!=1.29.0)"]
+postgresql_pg8000 = ["pg8000 (>=1.16.6)"]
 postgresql_psycopg2binary = ["psycopg2-binary"]
 postgresql_psycopg2cffi = ["psycopg2cffi"]
 pymysql = ["pymysql (<1)", "pymysql"]
-sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
 name = "srsly"
@@ -921,6 +953,14 @@ datasets = ["ml-datasets (>=0.2.0,<0.3.0)"]
 mxnet = ["mxnet (>=1.5.1,<1.6.0)"]
 tensorflow = ["tensorflow (>=2.0.0,<2.6.0)"]
 torch = ["torch (>=1.6.0)"]
+
+[[package]]
+name = "toml"
+version = "0.10.2"
+description = "Python Library for Tom's Obvious, Minimal Language"
+category = "dev"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "tomli"
@@ -1030,7 +1070,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "59fc9d65e6255a3a53a8a2d4742b26d177f004f36a362a7ac1ceb3c92ac189ef"
+content-hash = "f0d8d2997c9d62db4c90c8a51e59ba8c941d88b3084218b8eb73c6b36feb2145"
 
 [metadata.files]
 aiosqlite = [
@@ -1049,7 +1089,6 @@ asttokens = [
     {file = "asttokens-2.0.5-py2.py3-none-any.whl", hash = "sha256:0844691e88552595a6f4a4281a9f7f79b8dd45ca4ccea82e5e05b4bbdb76705c"},
     {file = "asttokens-2.0.5.tar.gz", hash = "sha256:9a54c114f02c7a9480d56550932546a3f1fe71d8a02f1bc7ccd0ee3ee35cf4d5"},
 ]
-asyncpg = []
 backcall = [
     {file = "backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
     {file = "backcall-0.2.0.tar.gz", hash = "sha256:5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e"},
@@ -1142,7 +1181,7 @@ cymem = [
     {file = "cymem-2.0.6-cp39-cp39-win_amd64.whl", hash = "sha256:c59293b232b53ebb47427f16cf648e937022f489cff36c11d1d8a1f0075b6609"},
     {file = "cymem-2.0.6.tar.gz", hash = "sha256:169725b5816959d34de2545b33fee6a8021a6e08818794a426c5a4f981f17e5e"},
 ]
-databases = []
+darker = []
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
     {file = "decorator-5.1.1.tar.gz", hash = "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330"},
@@ -1158,6 +1197,7 @@ feedparser = [
     {file = "feedparser-6.0.8-py3-none-any.whl", hash = "sha256:1b7f57841d9cf85074deb316ed2c795091a238adb79846bc46dccdaf80f9c59a"},
     {file = "feedparser-6.0.8.tar.gz", hash = "sha256:5ce0410a05ab248c8c7cfca3a0ea2203968ee9ff4486067379af4827a59f9661"},
 ]
+flake8 = []
 greenlet = [
     {file = "greenlet-1.1.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:58df5c2a0e293bf665a51f8a100d3e9956febfbf1d9aaf8c0677cf70218910c6"},
     {file = "greenlet-1.1.2-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:aec52725173bd3a7b56fe91bc56eccb26fbdff1386ef123abb63c84c5b43b63a"},
@@ -1229,6 +1269,10 @@ idna = [
 ipython = [
     {file = "ipython-8.2.0-py3-none-any.whl", hash = "sha256:1b672bfd7a48d87ab203d9af8727a3b0174a4566b4091e9447c22fb63ea32857"},
     {file = "ipython-8.2.0.tar.gz", hash = "sha256:70e5eb132cac594a34b5f799bd252589009905f05104728aea6a403ec2519dc1"},
+]
+isort = [
+    {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
+    {file = "isort-5.10.1.tar.gz", hash = "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"},
 ]
 jedi = [
     {file = "jedi-0.18.1-py2.py3-none-any.whl", hash = "sha256:637c9635fcf47945ceb91cd7f320234a7be540ded6f3e99a50cb6febdfd1ba8d"},
@@ -1355,6 +1399,7 @@ matplotlib-inline = [
     {file = "matplotlib-inline-0.1.3.tar.gz", hash = "sha256:a04bfba22e0d1395479f866853ec1ee28eea1485c1d69a6faf00dc3e24ff34ee"},
     {file = "matplotlib_inline-0.1.3-py3-none-any.whl", hash = "sha256:aed605ba3b72462d64d475a21a9296f400a19c4f74a31b59103d2a99ffd5aa5c"},
 ]
+mccabe = []
 murmurhash = [
     {file = "murmurhash-1.0.6-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:1431d817e1fff1ed35f8dc54dd5b4d70165ec98076de8aca351805f8037293f3"},
     {file = "murmurhash-1.0.6-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5c7b8cc4a8db1c821b80f8ca70a25c3166b14d68ecef8693a117c6a0b1d74ace"},
@@ -1461,6 +1506,7 @@ pure-eval = [
     {file = "pure_eval-0.2.2-py3-none-any.whl", hash = "sha256:01eaab343580944bc56080ebe0a674b39ec44a945e6d09ba7db3cb8cec289350"},
     {file = "pure_eval-0.2.2.tar.gz", hash = "sha256:2b45320af6dfaa1750f543d714b6d1c520a1688dec6fd24d339063ce0aaa9ac3"},
 ]
+pycodestyle = []
 pycountry = [
     {file = "pycountry-22.3.5.tar.gz", hash = "sha256:b2163a246c585894d808f18783e19137cb70a0c18fb36748dc01fc6f109c1646"},
 ]
@@ -1488,6 +1534,7 @@ pydantic = [
     {file = "pydantic-1.8.2-py3-none-any.whl", hash = "sha256:fec866a0b59f372b7e776f2d7308511784dace622e0992a0b59ea3ccee0ae833"},
     {file = "pydantic-1.8.2.tar.gz", hash = "sha256:26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b"},
 ]
+pyflakes = []
 pygments = [
     {file = "Pygments-2.11.2-py3-none-any.whl", hash = "sha256:44238f1b60a76d78fc8ca0528ee429702aae011c265fe6a8dd8b63049ae41c65"},
     {file = "Pygments-2.11.2.tar.gz", hash = "sha256:4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a"},
@@ -1667,6 +1714,10 @@ thinc = [
     {file = "thinc-8.0.15-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ecd8eab82598b079e901f16567818dc955481326c01d84b819c3c05801b97e07"},
     {file = "thinc-8.0.15-cp39-cp39-win_amd64.whl", hash = "sha256:5d98e6b3bf220c1068442d09d7c34dd8e52bbdfa43ea32f773747c5909a1c011"},
     {file = "thinc-8.0.15.tar.gz", hash = "sha256:2e315020da85c3791e191fbf37c4a2433f57cf322e27380da0cd4de99d96053b"},
+]
+toml = [
+    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
+    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},

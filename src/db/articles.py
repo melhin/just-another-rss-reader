@@ -55,11 +55,19 @@ class Article:
 
         await cursor.close()
 
+    async def get_total_articles(self, connection: Connection) -> int:
+        cursor = await connection.cursor()
+        sql = "select count(0) from articles"
+        await cursor.execute(sql)
+        response = await cursor.fetchone()
+        await cursor.close()
+        return response[0]
+
     async def get_articles(
         self, connection: Connection, offset: int = 0, limit: int = 10
     ) -> Dict[str, str]:
         cursor = await connection.cursor()
-        sql = f"select title, url, description  from articles  order by created_at desc limit ? offset ?"
+        sql = "select title, url, description, feed_url  from articles  order by created_at desc limit ? offset ?"
         await cursor.execute(
             sql,
             (
@@ -67,7 +75,7 @@ class Article:
                 offset,
             ),
         )
-        columns = ["title", "url", "description"]
+        columns = ["title", "url", "description", "feed_url"]
         formated_response = [dict(zip(columns, row)) for row in await cursor.fetchall()]
         await cursor.close()
         return formated_response
