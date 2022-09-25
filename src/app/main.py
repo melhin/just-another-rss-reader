@@ -7,7 +7,7 @@ from starlette.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette.applications import Starlette
 
-from src.db import connection
+from src.db import connection, database
 from src.db.articles import Article
 
 templates = Jinja2Templates(directory="src/app/templates")
@@ -50,13 +50,19 @@ async def get_feed(request):
     return templates.TemplateResponse("index.html", context=context)
 
 
-def startup():
-    pass
-
-
 routes = [
     Route("/", get_feed),
     Mount("/static", StaticFiles(directory="src/app/static"), name="static"),
 ]
 
-app = Starlette(debug=True, routes=routes, on_startup=[startup])
+app = Starlette(debug=True, routes=routes)
+
+
+@app.on_event("startup")
+async def startup():
+    await database.connect()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await database.disconnect()

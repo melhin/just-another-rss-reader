@@ -3,10 +3,21 @@ import sqlite3
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
+from databases import Database
+from sqlalchemy import MetaData
+from sqlalchemy.ext.declarative import declarative_base
+
 
 import aiosqlite
 
 logger = logging.getLogger(__name__)
+
+
+print("Calling database")
+
+DB_URL = "postgresql+asyncpg://postgres:postgres@localhost/another-reader"
+database = Database(DB_URL)
+metadata = MetaData()
 
 
 def get_db_path() -> Path:
