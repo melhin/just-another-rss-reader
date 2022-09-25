@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, validator
 from starlette.routing import Mount, Route
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
@@ -16,6 +16,13 @@ templates = Jinja2Templates(directory="src/app/templates")
 class FeedParams(BaseModel):
     offset: Optional[int] = 0
     limit: Optional[int] = 25
+    when: Optional[str] = "today"
+
+    @validator("when")
+    def when_match(cls, v):
+        if v not in ["today", "thisweek", "thismonth"]:
+            raise ValueError("Invalid value for when")
+        return v
 
 
 async def get_feed(request):
@@ -26,16 +33,19 @@ async def get_feed(request):
 
     async with connection() as db_conn:
         article = Article()
-        response = await article.get_articles(connection=db_conn, offset=parsed.offset, limit=parsed.limit)
-        total = await article.get_total_articles(db_conn)
+        response = await article.get_articles(
+            connection=db_conn, offset=parsed.offset, limit=parsed.limit, when=parsed.when
+        )
+        total = await article.get_total_articles(db_conn, when=parsed.when)
     previous = parsed.offset - parsed.limit
     next = parsed.offset + parsed.limit
     context = {
         "request": request,
         "response": response,
-        "previous": previous if previous > 0 else None,
+        "previous": previous if previous >= 0 else None,
         "next": next if next < total else None,
         "total": total,
+        "when": parsed.when,
     }
     return templates.TemplateResponse("index.html", context=context)
 

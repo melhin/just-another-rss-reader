@@ -28,7 +28,7 @@ def generate_article_summary(body: str, url: str) -> str:
     sentences = ""
     for sentence in summarizer(parser.document, SENTENCES_COUNT):
         sentences += f". {sentence}"
-    return sentences
+    return sentences.lstrip('. ')
 
 
 def get_entities_for_text(entry: Entry) -> List[str]:

@@ -20,21 +20,17 @@
                 <span class="fa fa-home mr-2"></span> <b class=" text-purple-800">Trending When ?</b>
                 <ul class="nav flex flex-col overflow-hidden">
                     <li class="nav-item">
-                        <a class="nav-link text-purple-800 hover:text-purple-600 truncate" href="/today">
+                        <a class="nav-link text-purple-800 hover:text-purple-600 truncate" href="?when=today">
                             <span class="fa fa-home mr-6"></span> Today
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-purple-800 hover:text-purple-600 truncate" href="/this-week">
+                        <a class="nav-link text-purple-800 hover:text-purple-600 truncate" href="?when=thisweek">
                             <span class="fa fa-home mr-6"></span> This Week
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-purple-800 hover:text-purple-600" href="/this-month">
+                        <a class="nav-link text-purple-800 hover:text-purple-600" href="?when=thismonth">
                             <span class="fa fa-home mr-6"></span> This Month
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-purple-800 hover:text-purple-600" href="/this-year">
-                            <span class="fa fa-home mr-6"></span> This Year</a>
                     </li>
                 </ul>
             </div>
@@ -68,17 +64,20 @@
                 <nav aria-label="Page navigation example">
                     <ul class="inline-flex mt-4 -space-x-px">
                         <li>
-                        {% if previous %}
-                        <a href="?offset={{ previous }}"
+                        {% if previous is not none %}
+                        <a href="?offset={{ previous }}&when={{ when }}"
                         class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 ml-0 rounded-l-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
                         </li>
                         {% endif %}
                         {% if next %}
                         <li>
-                        <a href="?offset={{ next }}"
+                        <a href="?offset={{ next }}&when={{ when }}"
                         class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
                         </li>
                         {% endif %}
+                        <li>
+                            <span class="m-5" x-text="count">Total Articles: {{ total }}</span>
+                        </li>
                     </ul>
             </nav>
             </div>
