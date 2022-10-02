@@ -4,10 +4,10 @@ from typing import List
 
 import feedparser
 
-from src.db import connection
-from src.db.articles import Article
-from src.fetcher.feed_models import CompleteData, Feed, FeedParserResponse
+from src.db.articles import ArticleService
+from src.fetcher.feed_models import CompleteData, FeedParserResponse
 from src.fetcher.request import fetch_from_url
+from src.db.session import get_db_session
 from src.fetcher.text_process import get_entry
 
 logger = logging.getLogger(__name__)
@@ -18,9 +18,7 @@ async def get_links_from_feed(feed_url: str) -> List[FeedParserResponse]:
     response = await fetch_from_url(url=feed_url)
     feed_parser_responses = []
     for entry in feedparser.parse(response.text).entries:
-        feed_parser_responses.append(
-            FeedParserResponse(link=entry.link, title=entry.title, feed_url=feed_url)
-        )
+        feed_parser_responses.append(FeedParserResponse(link=entry.link, title=entry.title, feed_url=feed_url))
     return feed_parser_responses
 
 
@@ -29,19 +27,17 @@ async def safe_get_entry(sem, feed_parser_response):
         return await get_entry(feed_parser_response)
 
 
-async def fetch_feed(data) -> CompleteData:
-    complete_data = CompleteData()
-    article = Article()
-    for feed in data:
-        async with connection() as db_conn:
+async def fetch_feed() -> CompleteData:
+    async with get_db_session() as session:
+        article_service = ArticleService(session=session)
+        for feed_url, feed_id in await article_service.get_all_feeds():
             try:
-                feed = feed.strip()
+                feed = feed_url.strip()
                 entries = []
                 logger.info("Collecting values from %s", feed)
                 feed_parser_responses = await get_links_from_feed(feed)
                 all_links = [ele.link for ele in feed_parser_responses]
-                existing_link = await article.get_existing_links(
-                    connection=db_conn,
+                existing_link = await article_service.get_existing_links(
                     links=all_links,
                 )
                 sem = asyncio.Semaphore(SIMULTANEOUS_DOWNLOADS)
@@ -52,9 +48,7 @@ async def fetch_feed(data) -> CompleteData:
                     if feed_parser_response.link not in existing_link
                 ]
                 entries = await asyncio.gather(*tasks, return_exceptions=False)
-                await article.save_articles(
-                    connection=db_conn, entries=entries, feed_url=feed
-                )
+                await article_service.save_articles(entries=entries, feed_id=feed_id)
             except Exception as ex:
                 logger.error("Caught error executing task %s", ex)
                 raise ex

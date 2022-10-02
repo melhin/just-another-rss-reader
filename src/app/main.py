@@ -7,16 +7,16 @@ from starlette.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette.applications import Starlette
 
-from src.db import connection, database
-from src.db.articles import Article
+from src.db.articles import ArticleService
+from src.db.session import make_engine, make_session_factory, get_db_session_from_request
 
 templates = Jinja2Templates(directory="src/app/templates")
 
 
 class FeedParams(BaseModel):
     offset: Optional[int] = 0
-    limit: Optional[int] = 25
-    when: Optional[str] = "today"
+    limit: Optional[int] = 10
+    when: Optional[str] = "thisyear"
 
     @validator("when")
     def when_match(cls, v):
@@ -31,12 +31,10 @@ async def get_feed(request):
     except ValidationError as e:
         return JSONResponse({"error": e.json()})
 
-    async with connection() as db_conn:
-        article = Article()
-        response = await article.get_articles(
-            connection=db_conn, offset=parsed.offset, limit=parsed.limit, when=parsed.when
-        )
-        total = await article.get_total_articles(db_conn, when=parsed.when)
+    async with get_db_session_from_request(request) as session:
+        article_service = ArticleService(session=session)
+        response = await article_service.get_articles(offset=parsed.offset, limit=parsed.limit, when=parsed.when)
+        total = await article_service.get_total_articles(when=parsed.when)
     previous = parsed.offset - parsed.limit
     next = parsed.offset + parsed.limit
     context = {
@@ -58,11 +56,23 @@ routes = [
 app = Starlette(debug=True, routes=routes)
 
 
+def _setup_db(app: Starlette) -> None:  # pragma: no cover
+    """
+    Creates connection to the database.
+    This function creates SQLAlchemy engine instance,
+    session_factory for creating sessions
+    and stores them in the application's state property.
+    :param app: fastAPI application.
+    """
+    app.state.db_engine = make_engine()
+    app.state.db_session_factory = make_session_factory(app.state.db_engine)
+
+
 @app.on_event("startup")
 async def startup():
-    await database.connect()
+    _setup_db(app)
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    await database.disconnect()
+    await app.state.db_engine.dispose()

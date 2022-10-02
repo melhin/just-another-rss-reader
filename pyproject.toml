@@ -6,7 +6,7 @@ authors = [""]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^1.8.2"
+pydantic = "1.7.4"
 sumy = "^0.10.0"
 feedparser = "^6.0.8"
 httpx = "^0.22.0"
@@ -18,6 +18,8 @@ uvicorn = "^0.18.2"
 databases = {extras = ["asyncpg"], version = "^0.6.1"}
 alembic = "^1.8.1"
 psycopg2 = "^2.9.3"
+yarl = "^1.8.1"
+python-dotenv = "^0.21.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "black"
