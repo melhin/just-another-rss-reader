@@ -3,7 +3,6 @@ from typing import Dict, List, Tuple
 
 from src.db.models import articles, article_sources, article_keywords
 from sqlalchemy import select, desc, insert, func
-from aiosqlite import Connection
 from src.fetcher.feed_models import Entry
 import datetime
 
@@ -16,7 +15,7 @@ class ArticleService:
         self,
     ) -> Tuple[str, str]:
         values = await self.session.execute(
-            select([article_sources.c.url, article_sources.c.id]).order_by(desc(article_sources.c.created_at))
+            select([article_sources.c.url, article_sources.c.id]).order_by(desc(article_sources.c.priority))
         )
         return values.fetchall()
 
@@ -79,13 +78,15 @@ class ArticleService:
                 }
             )
             entities[entry.hash] = entry.entities
-        await self.session.execute(insert(articles), records)
+        if records:
+            await self.session.execute(insert(articles), records)
 
         hash_id_mapping = await self.get_ids_from_hashes(list(entities.keys()))
+        keyword_records = []
         for hash, keywords in entities.items():
-            records = [
+            keyword_records = [
                 {"keyword": keyword, "article_id": hash_id_mapping[hash], "created_at": datetime.datetime.utcnow()}
                 for keyword in keywords
             ]
             if records:
-                await self.session.execute(insert(article_keywords), records)
+                await self.session.execute(insert(article_keywords), keyword_records)

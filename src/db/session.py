@@ -14,7 +14,7 @@ def make_engine() -> AsyncEngine:
 
     :return: async engine
     """
-    return create_async_engine(str(settings.db_url), echo=settings.db_echo)
+    return create_async_engine(str(settings.db_url), echo=settings.db_echo, **settings.ssl_params)
 
 
 def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
@@ -31,6 +31,7 @@ def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
         ),
         scopefunc=current_task,
     )
+
 
 @asynccontextmanager
 async def get_db_session_from_request(request: Request) -> AsyncGenerator[AsyncSession, None]:

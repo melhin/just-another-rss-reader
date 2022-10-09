@@ -2,7 +2,6 @@ import os
 import sys
 from logging.config import fileConfig
 
-import alembic
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
@@ -23,6 +22,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 
 from src.db import models  # noqa
+from src.settings import settings
 
 target_metadata = models.metadata
 
@@ -56,11 +56,7 @@ def run_migrations_offline():
 
 
 def get_url():
-    user = os.getenv("DB_USER", "postgres")
-    password = os.getenv("DB_PASSWORD", "")
-    server = os.getenv("DB_HOST", "localhost")
-    db = os.getenv("DB_NAME", "app")
-    return f"postgresql://{user}:{password}@{server}/{db}"
+    return str(settings.db_url).replace("+asyncpg", "")
 
 
 def run_migrations_online():
@@ -70,14 +66,15 @@ def run_migrations_online():
     """
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = get_url()
+    configuration["sqlalchemy.connect_args"] = settings.ssl_params
     connectable = engine_from_config(
-        configuration, prefix="sqlalchemy.", poolclass=pool.NullPool,
+        configuration,
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata, compare_type=True
-        )
+        context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
 
         with context.begin_transaction():
             context.run_migrations()

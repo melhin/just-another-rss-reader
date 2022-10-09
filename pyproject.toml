@@ -15,14 +15,15 @@ spacy = "^3.2.4"
 pytailwindcss = "0.1.4"
 starlette = "^0.20.4"
 uvicorn = "^0.18.2"
-databases = {extras = ["asyncpg"], version = "^0.6.1"}
 alembic = "^1.8.1"
 psycopg2 = "^2.9.3"
 yarl = "^1.8.1"
 python-dotenv = "^0.21.0"
+SQLAlchemy = {extras = ["asyncpg"], version = "^1.4.41"}
+asyncpg = "^0.26.0"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
-ipython = "black"
 black = {version = "^22.3.0", allow-prereleases = true}
 flake8 = "^5.0.4"
 darker = {extras = ["isort"], version = "^1.5.0"}

@@ -1,4 +1,6 @@
 import enum
+import base64
+from typing import Dict
 from pathlib import Path
 from tempfile import gettempdir
 
@@ -36,7 +38,8 @@ class Settings(BaseSettings):
     db_password: str = "reader"
     db_name: str = "reader"
     db_echo: bool = False
-
+    ssl_enabled: bool = False
+    ssl_cert_base64: str = ""
 
     @property
     def db_url(self) -> URL:
@@ -53,6 +56,20 @@ class Settings(BaseSettings):
             password=self.db_password,
             path=f"/{self.db_name}",
         )
+
+    @property
+    def ssl_params(self) -> Dict:
+        # Encode like this
+        # with open("cert.crt") as fh: base64.b64encode(fh.read().encode('ascii'))
+        file_path = "/tmp/ca_file_path.crt"
+        if self.ssl_enabled and self.ssl_cert_base64:
+            base64_bytes = self.ssl_cert_base64.encode("ascii")
+            message_bytes = base64.b64decode(base64_bytes)
+            with open(file_path, "wb") as fh:
+                fh.write(message_bytes)
+
+        print({"sslmode": "require", "sslrootcert": file_path})
+        return {"sslmode": "require", "sslrootcert": file_path}
 
     class Config:
         env_file = ".env"

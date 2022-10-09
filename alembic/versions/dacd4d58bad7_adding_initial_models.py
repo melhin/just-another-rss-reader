@@ -1,8 +1,8 @@
-"""Addig initial tables for articles
+"""Adding initial models
 
-Revision ID: 4b4ae319d31d
+Revision ID: dacd4d58bad7
 Revises: 
-Create Date: 2022-10-02 11:06:07.812536
+Create Date: 2022-10-03 12:33:31.568106
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4b4ae319d31d'
+revision = 'dacd4d58bad7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,6 +24,7 @@ def upgrade() -> None:
     sa.Column('url', sa.TEXT(), nullable=False),
     sa.Column('description', sa.TEXT(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('priority', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('url')
     )
@@ -33,7 +34,6 @@ def upgrade() -> None:
     sa.Column('title', sa.TEXT(), nullable=False),
     sa.Column('url', sa.TEXT(), nullable=False),
     sa.Column('description', sa.TEXT(), nullable=True),
-    sa.Column('feed_url', sa.TEXT(), nullable=False),
     sa.Column('article_source_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['article_source_id'], ['article_sources.id'], ),
@@ -47,8 +47,7 @@ def upgrade() -> None:
     sa.Column('article_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['article_id'], ['articles.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('keyword')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

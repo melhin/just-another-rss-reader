@@ -10,6 +10,7 @@ article_sources = sqlalchemy.Table(
     sqlalchemy.Column("url", sqlalchemy.TEXT, nullable=False, unique=True),
     sqlalchemy.Column("description", sqlalchemy.TEXT, nullable=True),
     sqlalchemy.Column("created_at", sqlalchemy.DateTime, nullable=False),
+    sqlalchemy.Column("priority", sqlalchemy.Integer, default=0),
 )
 
 articles = sqlalchemy.Table(
