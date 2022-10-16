@@ -20,6 +20,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: pull
+        env:
+          DB_NAME: "postgres"
+          DB_USER: "postgres"
+          SSL_ENABLED: 1
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SSL_CERT_BASE64: ${{ secrets.SSL_CERT_BASE64 }}
         run: |
           docker pull ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a
           docker run  --rm --name collector ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a collect
