@@ -29,4 +29,4 @@ jobs:
           SSL_CERT_BASE64: ${{ secrets.SSL_CERT_BASE64 }}
         run: |
           docker pull ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a
-          docker run  --rm --name collector -e DB_HOST=$DB_HOST -e DB_PASSWORD=$DB_PASSWORD -e DB_NAME=$DB_NAME -e DB_USER=$DB_USER -e SSL_ENABLED=$SSL_ENABLED -e SSL_CERT_BASE64=$SSL_CERT_BASE64 ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a collect
+          docker run  --rm --name collector -e DB_HOST=$DB_HOST -e DB_PASSWORD=$DB_PASSWORD -e DB_NAME=$DB_NAME -e DB_USER=$DB_USER ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a collect
