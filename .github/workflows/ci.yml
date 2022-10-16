@@ -27,5 +27,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: Dockerfile
           push: true
           tags: melhin/just-another-rss-reader:latest
