@@ -6,13 +6,13 @@ do
     case "$arg" in
         app)
             echo "Running migration"
-            alembic upgrade head
+            alembic -c alembic.ini upgrade head
             echo "Starting application"
             python run.py
             ;;
         collect)
             echo "Running migration"
-            alembic upgrade head
+            alembic -c alembic.ini upgrade head
             echo "Starting collection service"
             python collect.py
             ;;

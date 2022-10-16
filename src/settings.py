@@ -67,9 +67,8 @@ class Settings(BaseSettings):
             message_bytes = base64.b64decode(base64_bytes)
             with open(file_path, "wb") as fh:
                 fh.write(message_bytes)
-
-        print({"sslmode": "require", "sslrootcert": file_path})
-        return {"sslmode": "require", "sslrootcert": file_path}
+            return {"sslmode": "require", "sslrootcert": file_path}
+        return {}
 
     class Config:
         env_file = ".env"

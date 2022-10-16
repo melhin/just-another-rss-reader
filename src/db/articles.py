@@ -82,11 +82,10 @@ class ArticleService:
             await self.session.execute(insert(articles), records)
 
         hash_id_mapping = await self.get_ids_from_hashes(list(entities.keys()))
-        keyword_records = []
         for hash, keywords in entities.items():
             keyword_records = [
                 {"keyword": keyword, "article_id": hash_id_mapping[hash], "created_at": datetime.datetime.utcnow()}
                 for keyword in keywords
             ]
-            if records:
+            if keyword_records:
                 await self.session.execute(insert(article_keywords), keyword_records)

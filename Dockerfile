@@ -6,7 +6,6 @@ ARG APP_NAME=just-another-rss-reader
 ARG APP_PATH=/opt/$APP_NAME
 ARG PYTHON_VERSION=3.10.0
 ARG POETRY_VERSION=1.1.13
-ENV PYTHONPATH '${PYTHONPATH}:./src'
 
 EXPOSE 7000
 
@@ -29,7 +28,7 @@ RUN pip install -U pip setuptools wheel poetry
 ENV PATH="$POETRY_HOME/bin:$PATH;"
 
 
-WORKDIR /
+WORKDIR /reader
 RUN poetry config virtualenvs.create false
 COPY ./poetry.lock ./pyproject.toml ./
 
@@ -38,9 +37,10 @@ RUN poetry install --only main
 RUN python -m spacy download en_core_web_sm
 RUN python -m nltk.downloader punkt
 
-COPY ./src ./src
-COPY ./alembic ./alembic
-COPY ./run.py ./collect.py ./alembic.ini ./docker-entrypoint.sh ./
+ENV PYTHONPATH '${PYTHONPATH}:./src'
+COPY src src
+COPY alembic alembic
+COPY run.py collect.py alembic.ini docker-entrypoint.sh /reader/
 
-ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
+ENTRYPOINT [ "/reader/docker-entrypoint.sh" ]
 CMD ["app"]

@@ -10,7 +10,7 @@ from starlette.applications import Starlette
 from src.db.articles import ArticleService
 from src.db.session import make_engine, make_session_factory, get_db_session_from_request
 
-templates = Jinja2Templates(directory="src/app/templates")
+templates = Jinja2Templates(directory="src/web_app/templates")
 
 
 class FeedParams(BaseModel):
@@ -20,7 +20,7 @@ class FeedParams(BaseModel):
 
     @validator("when")
     def when_match(cls, v):
-        if v not in ["today", "thisweek", "thismonth"]:
+        if v not in ["today", "thisweek", "thismonth", "thisyear"]:
             raise ValueError("Invalid value for when")
         return v
 
@@ -50,7 +50,7 @@ async def get_feed(request):
 
 routes = [
     Route("/", get_feed),
-    Mount("/static", StaticFiles(directory="src/app/static"), name="static"),
+    Mount("/static", StaticFiles(directory="src/web_app/static"), name="static"),
 ]
 
 app = Starlette(debug=True, routes=routes)
