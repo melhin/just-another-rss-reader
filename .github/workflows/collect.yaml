@@ -22,4 +22,4 @@ jobs:
       - name: pull
         run: |
           docker pull ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a
-          docker run  --rm --name collector ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a: collect
+          docker run  --rm --name collector ghcr.io/melhin/ghcr.io/melhin/just-another-rss:main-8cdfb3a collect
