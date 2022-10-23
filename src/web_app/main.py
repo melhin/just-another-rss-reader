@@ -1,21 +1,47 @@
+import base64
+import binascii
 from typing import Optional
 
 from pydantic import BaseModel, ValidationError, validator
 from starlette.routing import Mount, Route
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, PlainTextResponse
+from starlette.middleware import Middleware
 from starlette.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette.applications import Starlette
+from starlette.authentication import SimpleUser, AuthCredentials, AuthenticationError, AuthenticationBackend
+from starlette.middleware.authentication import AuthenticationMiddleware
 
-from src.db.articles import ArticleService
+from src.settings import settings
 from src.db.session import make_engine, make_session_factory, get_db_session_from_request
+from src.db.articles import ArticleService
 
 templates = Jinja2Templates(directory="src/web_app/templates")
 
 
+class BasicAuthBackend(AuthenticationBackend):
+    async def authenticate(self, conn):
+        if "Authorization" not in conn.headers or not settings.auth_password:
+            return
+
+        auth = conn.headers["Authorization"]
+        try:
+            scheme, credentials = auth.split()
+            if scheme.lower() != "basic":
+                return
+            decoded = base64.b64decode(credentials).decode("ascii")
+        except (ValueError, UnicodeDecodeError, binascii.Error):
+            raise AuthenticationError("Invalid basic auth credentials")
+
+        username, _, password = decoded.partition(":")
+        if password == settings.auth_password:
+            return AuthCredentials(["authenticated"]), SimpleUser(username)
+        return None
+
+
 class FeedParams(BaseModel):
     offset: Optional[int] = 0
-    limit: Optional[int] = 10
+    limit: Optional[int] = 20
     when: Optional[str] = "thisyear"
 
     @validator("when")
@@ -26,6 +52,9 @@ class FeedParams(BaseModel):
 
 
 async def get_feed(request):
+    if settings.auth_password and not request.user.is_authenticated:
+        return PlainTextResponse(str("User Unauthorized"), status_code=401, headers={"WWW-Authenticate": "Basic"})
+
     try:
         parsed = FeedParams(**request.query_params)
     except ValidationError as e:
@@ -52,8 +81,9 @@ routes = [
     Route("/", get_feed),
     Mount("/static", StaticFiles(directory="src/web_app/static"), name="static"),
 ]
+middleware = [Middleware(AuthenticationMiddleware, backend=BasicAuthBackend())]
 
-app = Starlette(debug=True, routes=routes)
+app = Starlette(routes=routes, middleware=middleware)
 
 
 def _setup_db(app: Starlette) -> None:  # pragma: no cover

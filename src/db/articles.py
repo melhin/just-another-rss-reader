@@ -38,14 +38,14 @@ class ArticleService:
         limit: int = 10,
     ) -> Dict[str, str]:
         values = await self.session.execute(
-            select([articles.c.title, articles.c.url, articles.c.description, article_sources.c.url])
+            select([articles.c.title, articles.c.url, articles.c.description, article_sources.c.name])
             .select_from(articles.join(article_sources))
             .where(articles.c.created_at >= self.get_time_slot(when))
             .limit(limit)
             .offset(offset)
             .order_by(desc(articles.c.created_at))
         )
-        columns = ["title", "url", "description", "feed_url"]
+        columns = ["title", "url", "description", "feed"]
         formated_response = [dict(zip(columns, row)) for row in values.fetchall()]
         return formated_response
 

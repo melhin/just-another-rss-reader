@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     db_echo: bool = False
     ssl_enabled: bool = False
     ssl_cert_base64: str = ""
+    auth_password: str = ""
 
     @property
     def db_url(self) -> URL:
