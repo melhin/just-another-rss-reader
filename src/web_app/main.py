@@ -76,9 +76,12 @@ async def get_feed(request):
     }
     return templates.TemplateResponse("index.html", context=context)
 
+async def ping(request):
+    return PlainTextResponse("pong")
 
 routes = [
     Route("/", get_feed),
+    Route("/ping", ping),
     Mount("/static", StaticFiles(directory="src/web_app/static"), name="static"),
 ]
 middleware = [Middleware(AuthenticationMiddleware, backend=BasicAuthBackend())]
