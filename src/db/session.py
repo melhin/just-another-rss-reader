@@ -14,10 +14,17 @@ def make_engine() -> AsyncEngine:
 
     :return: async engine
     """
-    return create_async_engine(str(settings.db_url), echo=settings.db_echo, **settings.ssl_params)
+    return create_async_engine(
+        str(settings.db_url),
+        echo=settings.db_echo,
+        **settings.ssl_params,
+        pool_size=5,
+        pool_recycle=300,
+        pool_pre_ping=True,
+    )
 
 
-def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
+async def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
     """Create session_factory for creating sessions.
 
     :param engine: async engine
@@ -40,12 +47,14 @@ async def get_db_session_from_request(request: Request) -> AsyncGenerator[AsyncS
     :param request: current request.
     :yield: database session.
     """
-    session: AsyncSession = request.app.state.db_session_factory()
+    session: AsyncSession = await make_session_factory(request.app.state.db_engine)
 
     try:  # noqa: WPS501
         yield session
-    finally:
         await session.commit()
+    except Exception:
+        session.rollback()
+    finally:
         await session.close()
 
 

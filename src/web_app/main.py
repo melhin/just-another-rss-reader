@@ -98,7 +98,6 @@ def _setup_db(app: Starlette) -> None:  # pragma: no cover
     :param app: fastAPI application.
     """
     app.state.db_engine = make_engine()
-    app.state.db_session_factory = make_session_factory(app.state.db_engine)
 
 
 @app.on_event("startup")
