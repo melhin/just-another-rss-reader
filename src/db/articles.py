@@ -1,9 +1,9 @@
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
-from src.db.models import articles, article_sources, article_keywords
+from db.models import articles, article_sources, article_keywords
 from sqlalchemy import select, desc, insert, func
-from src.fetcher.feed_models import Entry
+from fetcher.feed_models import Entry
 import datetime
 
 
@@ -62,6 +62,13 @@ class ArticleService:
     async def get_existing_links(self, links: List[str]) -> List[str]:
         values = await self.session.execute(select([articles.c.url]).where(articles.c.url.in_(links)))
         return [r[0] for r in values.fetchall()]
+
+    async def save_article_source(self, url: str, name: str, description: str):
+        await self.session.execute(
+            insert(article_sources).values(
+                url=url, name=name, description=description, created_at=datetime.datetime.utcnow()
+            )
+        )
 
     async def save_articles(self, entries: Entry, feed_id: int):
         records = []

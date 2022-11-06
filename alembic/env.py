@@ -21,8 +21,8 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from src.db import models  # noqa
-from src.settings import settings
+from db import models  # noqa
+from config import settings
 
 target_metadata = models.metadata
 

@@ -2,7 +2,7 @@ import asyncio
 import logging
 import sys
 
-from src.fetcher.coordinator import start_collection
+from fetcher.coordinator import start_collection
 
 
 logging.basicConfig(

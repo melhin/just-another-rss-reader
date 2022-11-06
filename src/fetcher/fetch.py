@@ -4,11 +4,11 @@ from typing import List
 
 import feedparser
 
-from src.db.articles import ArticleService
-from src.fetcher.feed_models import CompleteData, FeedParserResponse
-from src.fetcher.request import fetch_from_url
-from src.db.session import get_db_session
-from src.fetcher.text_process import get_entry
+from db.articles import ArticleService
+from fetcher.feed_models import CompleteData, FeedParserResponse
+from fetcher.request import fetch_from_url
+from db.session import get_db_session
+from fetcher.text_process import get_entry
 
 logger = logging.getLogger(__name__)
 SIMULTANEOUS_DOWNLOADS = 5

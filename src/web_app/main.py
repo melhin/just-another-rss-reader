@@ -12,9 +12,9 @@ from starlette.applications import Starlette
 from starlette.authentication import SimpleUser, AuthCredentials, AuthenticationError, AuthenticationBackend
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from src.settings import settings
-from src.db.session import make_engine, make_session_factory, get_db_session_from_request
-from src.db.articles import ArticleService
+from config import settings
+from db.session import make_engine, get_db_session_from_request
+from db.articles import ArticleService
 
 templates = Jinja2Templates(directory="src/web_app/templates")
 
@@ -97,7 +97,7 @@ def _setup_db(app: Starlette) -> None:  # pragma: no cover
     and stores them in the application's state property.
     :param app: fastAPI application.
     """
-    app.state.db_engine = make_engine()
+    app.state.db_engine = make_engine(str(settings.db_url))
 
 
 @app.on_event("startup")

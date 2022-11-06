@@ -9,8 +9,8 @@ from sumy.parsers.html import HtmlParser
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.utils import get_stop_words
 
-from src.fetcher.feed_models import Entry, FeedParserResponse
-from src.fetcher.request import fetch_from_url
+from fetcher.feed_models import Entry, FeedParserResponse
+from fetcher.request import fetch_from_url
 
 LANGUAGE = "english"
 SENTENCES_COUNT = 10
