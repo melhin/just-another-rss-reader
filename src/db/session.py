@@ -23,7 +23,6 @@ def make_engine(db_url: str) -> AsyncEngine:
         pool_pre_ping=True,
     )
 
-
 async def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
     """Create session_factory for creating sessions.
 
@@ -70,14 +69,4 @@ async def get_db_session(db_url: str=str(settings.db_url)) -> AsyncGenerator[Asy
         yield session
     finally:
         await session.commit()
-        await session.close()
-
-
-@asynccontextmanager
-async def get_test_session(db_engine) -> AsyncGenerator[AsyncSession, None]:
-    session: AsyncSession = await make_session_factory(db_engine)
-
-    try:  # noqa: WPS501
-        yield session
-    finally:
         await session.close()
