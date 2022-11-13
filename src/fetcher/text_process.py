@@ -1,16 +1,15 @@
 import logging
 from typing import List
 
-import nltk
 import spacy
-from sumy.nlp.stemmers import Stemmer
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.parsers.html import HtmlParser
-from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.utils import get_stop_words
+from sumy.nlp.stemmers import Stemmer
+from sumy.parsers.html import HtmlParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 
-from src.fetcher.feed_models import Entry, FeedParserResponse
-from src.fetcher.request import fetch_from_url
+from fetcher.request import fetch_from_url
+from fetcher.feed_models import Entry, FeedParserResponse
 
 LANGUAGE = "english"
 SENTENCES_COUNT = 10
@@ -28,7 +27,7 @@ def generate_article_summary(body: str, url: str) -> str:
     sentences = ""
     for sentence in summarizer(parser.document, SENTENCES_COUNT):
         sentences += f". {sentence}"
-    return sentences.lstrip('. ')
+    return sentences.lstrip(". ")
 
 
 def get_entities_for_text(entry: Entry) -> List[str]:

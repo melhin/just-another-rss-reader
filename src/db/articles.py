@@ -1,10 +1,11 @@
-from collections import defaultdict
-from typing import Dict, List, Tuple
-
-from src.db.models import articles, article_sources, article_keywords
-from sqlalchemy import select, desc, insert, func
-from src.fetcher.feed_models import Entry
 import datetime
+from typing import Dict, List, Tuple
+from collections import defaultdict
+
+from sqlalchemy import desc, func, insert, select
+
+from db.models import articles, article_sources, article_keywords
+from fetcher.feed_models import Entry
 
 
 class ArticleService:
@@ -63,8 +64,18 @@ class ArticleService:
         values = await self.session.execute(select([articles.c.url]).where(articles.c.url.in_(links)))
         return [r[0] for r in values.fetchall()]
 
-    async def save_articles(self, entries: Entry, feed_id: int):
+    async def save_article_source(self, url: str, name: str, description: str):
+        saved = await self.session.execute(
+            insert(article_sources).values(
+                url=url, name=name, description=description, created_at=datetime.datetime.utcnow()
+            )
+        )
+        return saved.inserted_primary_key[0]
+
+    async def save_articles(self, entries: Entry, feed_id: int, created_at=None):
+        created_at = created_at if created_at else datetime.datetime.utcnow()
         records = []
+        saved_pks = []
         entities = defaultdict(list)
         for entry in entries:
             records.append(
@@ -74,18 +85,20 @@ class ArticleService:
                     "title": entry.title,
                     "description": entry.description,
                     "article_source_id": feed_id,
-                    "created_at": datetime.datetime.utcnow(),
+                    "created_at": created_at,
                 }
             )
             entities[entry.hash] = entry.entities
         if records:
-            await self.session.execute(insert(articles), records)
+            saved = await self.session.execute(insert(articles), records)
+            saved_pks = [ele[0] for ele in saved.inserted_primary_key_rows]
 
         hash_id_mapping = await self.get_ids_from_hashes(list(entities.keys()))
         for hash, keywords in entities.items():
             keyword_records = [
-                {"keyword": keyword, "article_id": hash_id_mapping[hash], "created_at": datetime.datetime.utcnow()}
+                {"keyword": keyword, "article_id": hash_id_mapping[hash], "created_at": created_at}
                 for keyword in keywords
             ]
             if keyword_records:
                 await self.session.execute(insert(article_keywords), keyword_records)
+        return saved_pks

@@ -27,6 +27,12 @@ psycopg2-binary = "^2.9.3"
 black = {version = "^22.3.0", allow-prereleases = true}
 flake8 = "^5.0.4"
 darker = {extras = ["isort"], version = "^1.5.0"}
+pytest = "^7.2.0"
+SQLAlchemy-Utils = "^0.38.3"
+ipython = "^8.6.0"
+pytest-asyncio = "^0.20.1"
+factory-boy = "^3.2.1"
+trio = "^0.22.0"
 
 [tool.isort]
 line_length = 120

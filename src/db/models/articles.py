@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from src.db import metadata
+from db import metadata
 
 article_sources = sqlalchemy.Table(
     "article_sources",

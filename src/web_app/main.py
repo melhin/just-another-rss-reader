@@ -12,9 +12,9 @@ from starlette.applications import Starlette
 from starlette.authentication import SimpleUser, AuthCredentials, AuthenticationError, AuthenticationBackend
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from src.settings import settings
-from src.db.session import make_engine, make_session_factory, get_db_session_from_request
-from src.db.articles import ArticleService
+from config import settings
+from db.session import make_engine, get_db_session_from_request
+from db.articles import ArticleService
 
 templates = Jinja2Templates(directory="src/web_app/templates")
 
@@ -51,6 +51,13 @@ class FeedParams(BaseModel):
         return v
 
 
+async def get_articles_for_request(parsed, session):
+    article_service = ArticleService(session=session)
+    response = await article_service.get_articles(offset=parsed.offset, limit=parsed.limit, when=parsed.when)
+    total = await article_service.get_total_articles(when=parsed.when)
+    return response, total
+
+
 async def get_feed(request):
     if settings.auth_password and not request.user.is_authenticated:
         return PlainTextResponse(str("User Unauthorized"), status_code=401, headers={"WWW-Authenticate": "Basic"})
@@ -61,9 +68,7 @@ async def get_feed(request):
         return JSONResponse({"error": e.json()})
 
     async with get_db_session_from_request(request) as session:
-        article_service = ArticleService(session=session)
-        response = await article_service.get_articles(offset=parsed.offset, limit=parsed.limit, when=parsed.when)
-        total = await article_service.get_total_articles(when=parsed.when)
+        response, total = await get_articles_for_request(parsed, session)
     previous = parsed.offset - parsed.limit
     next = parsed.offset + parsed.limit
     context = {
@@ -76,11 +81,14 @@ async def get_feed(request):
     }
     return templates.TemplateResponse("index.html", context=context)
 
+
 async def ping(request):
     return PlainTextResponse("pong")
 
+
 routes = [
     Route("/", get_feed),
+    # Just to make sure that the app is kept alive by the free hosting providers
     Route("/ping", ping),
     Mount("/static", StaticFiles(directory="src/web_app/static"), name="static"),
 ]
@@ -97,7 +105,7 @@ def _setup_db(app: Starlette) -> None:  # pragma: no cover
     and stores them in the application's state property.
     :param app: fastAPI application.
     """
-    app.state.db_engine = make_engine()
+    app.state.db_engine = make_engine(str(settings.db_url))
 
 
 @app.on_event("startup")

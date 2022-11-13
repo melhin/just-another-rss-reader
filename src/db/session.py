@@ -6,16 +6,16 @@ from sqlalchemy.orm import sessionmaker
 from starlette.requests import Request
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine, async_scoped_session
 
-from src.settings import settings
+from config import settings
 
 
-def make_engine() -> AsyncEngine:
+def make_engine(db_url: str) -> AsyncEngine:
     """This function creates SQLAlchemy engine instance.
 
     :return: async engine
     """
     return create_async_engine(
-        str(settings.db_url),
+        db_url,
         echo=settings.db_echo,
         **settings.ssl_params,
         pool_size=5,
@@ -51,23 +51,20 @@ async def get_db_session_from_request(request: Request) -> AsyncGenerator[AsyncS
 
     try:  # noqa: WPS501
         yield session
-        await session.commit()
-    except Exception:
-        session.rollback()
     finally:
+        await session.commit()
         await session.close()
 
 
 @asynccontextmanager
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_db_session(db_url: str = str(settings.db_url)) -> AsyncGenerator[AsyncSession, None]:
     """
     Create and get database session.
     :param request: current request.
     :yield: database session.
     """
-    db_engine = make_engine()
-    db_session_factory = make_session_factory(db_engine)
-    session: AsyncSession = db_session_factory()
+    db_engine = make_engine(db_url=db_url)
+    session: AsyncSession = await make_session_factory(db_engine)
 
     try:  # noqa: WPS501
         yield session

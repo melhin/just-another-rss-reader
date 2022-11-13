@@ -1,2 +1,2 @@
-from src.db import metadata  # noqa
-from src.db.models.articles import *  # noqa
+from db import metadata  # noqa
+from db.models.articles import *  # noqa
