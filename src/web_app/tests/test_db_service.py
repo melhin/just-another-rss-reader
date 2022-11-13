@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta
+
 import pytest
 import pytest_asyncio
-from datetime import datetime, timedelta
 
 from db.articles import ArticleService
 from fetcher.feed_models import Entry
@@ -96,6 +97,7 @@ async def test_pagination(async_db_session, sources, saved_entries):
     assert await article_service.get_articles(when="today", offset=1, limit=1) == [
         {"description": "test1 description", "feed": "feed1", "title": "test1", "url": "https://test.com/test1"},
     ]
+
 
 @pytest.mark.asyncio
 async def test_filters(async_db_session, sources, saved_entries):

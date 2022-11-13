@@ -23,6 +23,7 @@ def make_engine(db_url: str) -> AsyncEngine:
         pool_pre_ping=True,
     )
 
+
 async def make_session_factory(engine: AsyncEngine) -> async_scoped_session:
     """Create session_factory for creating sessions.
 
@@ -56,7 +57,7 @@ async def get_db_session_from_request(request: Request) -> AsyncGenerator[AsyncS
 
 
 @asynccontextmanager
-async def get_db_session(db_url: str=str(settings.db_url)) -> AsyncGenerator[AsyncSession, None]:
+async def get_db_session(db_url: str = str(settings.db_url)) -> AsyncGenerator[AsyncSession, None]:
     """
     Create and get database session.
     :param request: current request.

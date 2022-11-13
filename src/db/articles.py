@@ -75,6 +75,7 @@ class ArticleService:
     async def save_articles(self, entries: Entry, feed_id: int, created_at=None):
         created_at = created_at if created_at else datetime.datetime.utcnow()
         records = []
+        saved_pks = []
         entities = defaultdict(list)
         for entry in entries:
             records.append(
@@ -90,6 +91,7 @@ class ArticleService:
             entities[entry.hash] = entry.entities
         if records:
             saved = await self.session.execute(insert(articles), records)
+            saved_pks = [ele[0] for ele in saved.inserted_primary_key_rows]
 
         hash_id_mapping = await self.get_ids_from_hashes(list(entities.keys()))
         for hash, keywords in entities.items():
@@ -99,4 +101,4 @@ class ArticleService:
             ]
             if keyword_records:
                 await self.session.execute(insert(article_keywords), keyword_records)
-        return [ele[0] for ele in saved.inserted_primary_key_rows]
+        return saved_pks

@@ -50,11 +50,13 @@ class FeedParams(BaseModel):
             raise ValueError("Invalid value for when")
         return v
 
+
 async def get_articles_for_request(parsed, session):
     article_service = ArticleService(session=session)
     response = await article_service.get_articles(offset=parsed.offset, limit=parsed.limit, when=parsed.when)
     total = await article_service.get_total_articles(when=parsed.when)
     return response, total
+
 
 async def get_feed(request):
     if settings.auth_password and not request.user.is_authenticated:
@@ -66,7 +68,7 @@ async def get_feed(request):
         return JSONResponse({"error": e.json()})
 
     async with get_db_session_from_request(request) as session:
-        response , total = await get_articles_for_request(parsed, session)
+        response, total = await get_articles_for_request(parsed, session)
     previous = parsed.offset - parsed.limit
     next = parsed.offset + parsed.limit
     context = {

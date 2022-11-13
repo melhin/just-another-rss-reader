@@ -9,7 +9,6 @@ from sqlalchemy_utils import drop_database, create_database, database_exists
 from starlette.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from starlette.applications import Starlette
-from unittest import mock
 
 from db import metadata
 from config import settings
