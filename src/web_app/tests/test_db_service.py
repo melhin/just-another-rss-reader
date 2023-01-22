@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from freezegun import freeze_time
 
 import pytest
 import pytest_asyncio
@@ -100,6 +101,7 @@ async def test_pagination(async_db_session, sources, saved_entries):
 
 
 @pytest.mark.asyncio
+@freeze_time("22-12-2022")
 async def test_filters(async_db_session, sources, saved_entries):
     article_service = ArticleService(session=async_db_session)
     assert await article_service.get_total_articles(when="today") == 2
