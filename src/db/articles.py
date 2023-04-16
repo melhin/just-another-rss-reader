@@ -72,7 +72,8 @@ class ArticleService:
         if category:
             filter.append(article_sources.c.categories.any(category))
         response = await self.session.execute(
-            select(func.count(articles.c.id)).select_from(articles).join(article_sources).where(*filter))
+            select(func.count(articles.c.id)).select_from(articles).join(article_sources).where(*filter)
+        )
         return response.scalar_one()
 
     async def get_ids_from_hashes(self, hashes: List[str]) -> Dict[str, str]:

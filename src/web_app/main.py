@@ -82,7 +82,7 @@ async def get_feed(request):
         "total": total,
         "when": parsed.when,
         "category": parsed.category,
-        "available_categories": [ele.value for ele in CategoryEnum]
+        "available_categories": [ele.value for ele in CategoryEnum],
     }
     return templates.TemplateResponse("index.html", context=context)
 

@@ -55,7 +55,7 @@ services:
       - "invalid"
     ports:
       - "5000:5000"
-  
+
   pgadmin:
     image: dpage/pgadmin4
     depends_on:
