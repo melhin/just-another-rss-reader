@@ -49,10 +49,9 @@ services:
       - ./.env
     depends_on:
       - db
-      - app 
+      - app
     command:
       # don't do anything by default, rest is handled by Makefile
       - "invalid"
     ports:
       - "5000:5000"
-

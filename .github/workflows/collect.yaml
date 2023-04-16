@@ -1,6 +1,6 @@
 name: Collect Data from RSS Feeds
 
-on: 
+on:
    workflow_dispatch:
    schedule:
      - cron: "5 */4 * * *"
