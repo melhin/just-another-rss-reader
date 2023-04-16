@@ -24,5 +24,7 @@ clean:
 migrate:
 	alembic upgrade head
 
+migrations:
+	alembic revision --autogenerate
 db-shell:
 	PGPASSWORD=$(DB_PASSWORD) psql -U postgres $(DB_NAME) -h $(DB_HOST) -p $(DB_PORT)

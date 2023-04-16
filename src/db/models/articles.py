@@ -1,6 +1,19 @@
+from enum import Enum
+
 import sqlalchemy
+import sqlalchemy.dialects.postgresql as pg
 
 from db import metadata
+
+
+class CategoryEnum(Enum):
+    GENERAL = "general"
+    WORLD = "world"
+    KERALA = "kerala"
+    INDIA = "india"
+    TECH = "tech"
+    GERMANY = "germany"
+
 
 article_sources = sqlalchemy.Table(
     "article_sources",
@@ -11,6 +24,8 @@ article_sources = sqlalchemy.Table(
     sqlalchemy.Column("description", sqlalchemy.TEXT, nullable=True),
     sqlalchemy.Column("created_at", sqlalchemy.DateTime, nullable=False),
     sqlalchemy.Column("priority", sqlalchemy.Integer, default=0),
+    sqlalchemy.Column("active", sqlalchemy.BOOLEAN, server_default=sqlalchemy.true()),
+    sqlalchemy.Column("categories", pg.ARRAY(sqlalchemy.String), server_default="{}"),
 )
 
 articles = sqlalchemy.Table(

@@ -7,7 +7,6 @@ from pydantic import BaseModel
 class Entry(BaseModel):
     title: str
     description: str
-    entities: List[str]
     link: str
 
     @property

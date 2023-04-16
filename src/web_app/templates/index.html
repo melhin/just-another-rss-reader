@@ -21,28 +21,48 @@
         class="flex-shrink-0 w-64 flex flex-col transition-all duration-300 mt-4"
         :class="{ '-ml-64': !sidebarOpen }"
       >
+        {% if category %} {% set url_category='&category='+category %} {% endif
+        %}`
         <div class="flex flex-row">
-          <nav class="flex-1 flex flex-col p-4 bg-blue-100 rounded-xl w-full h-full">
+          <nav
+            class="flex-1 flex flex-col p-4 bg-blue-100 rounded-xl w-full h-full"
+          >
             <span class="fa fa-home mt-4"></span>
             <b class="lg:text-lg md:text-4xl text-purple-800">When ?</b>
             <a
               class="p-2 lg:text-lg md:text-4xl text-purple-800 hover:text-purple-600 truncate"
-              href="?when=today"
+              href="?when=today{{ url_category }}"
             >
               Today
             </a>
             <a
               class="p-2 lg:text-lg md:text-4xl text-purple-800 hover:text-purple-600 truncate"
-              href="?when=thisweek"
+              href="?when=thisweek{{ url_category }}"
             >
               This Week
             </a>
             <a
               class="p-2 lg:text-lg md:text-4xl text-purple-800 hover:text-purple-600 truncate"
-              href="?when=thismonth"
+              href="?when=thismonth{{ url_category }}"
             >
               This Month
             </a>
+          </nav>
+        </div>
+        <div class="flex flex-row">
+          <nav
+            class="flex-1 flex flex-col p-4 bg-blue-100 rounded-xl w-full h-full"
+          >
+            <span class="fa fa-home mt-4"></span>
+            <b class="lg:text-lg md:text-4xl text-purple-800">Category ?</b>
+            {% for category in available_categories %}
+            <a
+              class="p-2 lg:text-lg md:text-4xl text-purple-800 hover:text-purple-600 truncate"
+              href="?when={{ when }}&category={{ category }}"
+            >
+              {{ category.capitalize() }}
+            </a>
+            {% endfor %}
           </nav>
         </div>
       </aside>
@@ -100,12 +120,24 @@
                   </p>
                 </span>
               </div>
+              <div class="px-6 pt-4 pb-2">
+                <span>
+                  Categories: {% for category in row.categories %}
+                  <span
+                    class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-blue-200 uppercase last:mr-0 mr-1"
+                  >
+                    <a href="?when={{ when }}&category={{ category }}">
+                      {{ category }}
+                    </a>
+                  </span>
+                  {% endfor %}
+                </span>
+              </div>
             </div>
             {% endfor %}
           </div>
           <nav>
             <ul class="flex row mt-4 -space-x-px gap-1">
-
               <li>
                 {% if previous is not none %}
                 <a

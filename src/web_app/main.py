@@ -14,7 +14,7 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 
 from config import settings
 from db.session import make_engine, get_db_session_from_request
-from db.articles import ArticleService
+from db.articles import ArticleService, CategoryEnum
 
 templates = Jinja2Templates(directory="src/web_app/templates")
 
@@ -43,6 +43,7 @@ class FeedParams(BaseModel):
     offset: Optional[int] = 0
     limit: Optional[int] = 20
     when: Optional[str] = "thisyear"
+    category: Optional[str] = None
 
     @validator("when")
     def when_match(cls, v):
@@ -53,8 +54,10 @@ class FeedParams(BaseModel):
 
 async def get_articles_for_request(parsed, session):
     article_service = ArticleService(session=session)
-    response = await article_service.get_articles(offset=parsed.offset, limit=parsed.limit, when=parsed.when)
-    total = await article_service.get_total_articles(when=parsed.when)
+    response = await article_service.get_articles(
+        offset=parsed.offset, limit=parsed.limit, when=parsed.when, category=parsed.category
+    )
+    total = await article_service.get_total_articles(when=parsed.when, category=parsed.category)
     return response, total
 
 
@@ -78,6 +81,8 @@ async def get_feed(request):
         "next": next if next < total else None,
         "total": total,
         "when": parsed.when,
+        "category": parsed.category,
+        "available_categories": [ele.value for ele in CategoryEnum]
     }
     return templates.TemplateResponse("index.html", context=context)
 
