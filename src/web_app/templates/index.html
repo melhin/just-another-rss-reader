@@ -110,21 +110,21 @@
               </div>
 
               <div class="px-6 pt-4 pb-2">
-                <span>
+                <span class="lg:text-sm md:text-2xl">
                   Source:
-                  <p
-                    class="text-purple-800 hover:text-purple-600"
-                    href="{{ row.feed_url }}"
+                  <a
+                    class=" text-purple-800 hover:text-purple-600"
+                    href="{{ row.url }}"
                   >
                     {{ row.feed }}
-                  </p>
+                  </a>
                 </span>
               </div>
               <div class="px-6 pt-4 pb-2">
                 <span>
-                  Categories: {% for category in row.categories %}
+                  {% for category in row.categories %}
                   <span
-                    class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-blue-200 uppercase last:mr-0 mr-1"
+                    class="lg:text-sm md:text-4xl font-semibold inline-block py-1 px-2 uppercase rounded bg-blue-200 uppercase last:mr-0 mr-1"
                   >
                     <a href="?when={{ when }}&category={{ category }}">
                       {{ category }}

@@ -12,7 +12,6 @@ do
             ;;
         collect)
             echo "Running migration"
-            alembic -c alembic.ini upgrade head
             echo "Starting collection service"
             python collect.py
             ;;
