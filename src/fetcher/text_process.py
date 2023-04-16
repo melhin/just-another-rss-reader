@@ -31,6 +31,9 @@ def generate_article_summary(body: str, url: str) -> str:
 
 
 def get_entities_for_text(entry: Entry) -> List[str]:
+    """note: this method is disabled for now. Will enable
+    when the use case is built
+    """
     logging.info("Got for analysis in worker %s", entry.title)
     allowed_lables = ["GPE", "NORP", "PERSON", "LOC", "ORG"]
     doc = nlp(entry.description)
@@ -48,12 +51,10 @@ async def get_entry(feed_parser_response: FeedParserResponse) -> Entry:
         title=feed_parser_response.title,
         link=feed_parser_response.link,
         description="",
-        entities=[],
     )
     try:
         body = await fetch_from_url(feed_parser_response.link)
         entry.description = generate_article_summary(body.text, entry.link)
-        entry.entities = get_entities_for_text(entry)
     except Exception as e:
         logger.error("Parsing %s failed with %s", entry.title, e)
     return entry
