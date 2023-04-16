@@ -1,10 +1,10 @@
-FROM python:3.11
+FROM python:3.10.1
 
 LABEL org.opencontainers.image.source=https://github.com/melhin/just-another-rss-reader
 
 ARG APP_NAME=just-another-rss-reader
 ARG APP_PATH=/opt/$APP_NAME
-ARG PYTHON_VERSION=3.10.0
+ARG PYTHON_VERSION=3.10.1
 ARG POETRY_VERSION=1.1.13
 
 EXPOSE 7000
